@@ -5,9 +5,7 @@ from scipy import spatial as sp
 # Create your views here.
 def home(request):
 	df = pd.read_csv('https://raw.githubusercontent.com/Sanket-Tantia/IndiaCensus-Gramener/master/india-districts-census-2011.csv')
-	# print (absolute_path)
-	# df = pd.read_pickle('https://www.dropbox.com/s/vcjr57s9epjn7e0/indiaCensusPickle?dl=0')
-
+	
 	#1st question
 	#Grouping all the distrcits into states
 	literacy_rate = df.groupby('State name')['Population','Literate'].sum()
