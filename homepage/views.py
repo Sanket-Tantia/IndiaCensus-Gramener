@@ -22,7 +22,6 @@ def home(request):
 	#Extracting districts of bihar and tamilnadu
 	df_bihar = df[(df['State name'] == 'BIHAR')].iloc[:,2:]
 	df_tamilNadu = df[(df['State name'] == 'TAMIL NADU')].iloc[:,2:]
-	# df_bihar_json,df_tamilNadu_json = df_bihar.to_json(orient='index'),df_tamilNadu.to_json(orient='index')
 	
 	#normalising the columns so that value of one column does not mask the effect of others
 	for col in df_bihar.iloc[:,1:]:
@@ -35,8 +34,6 @@ def home(request):
 	#converting eucledian distance into similarity score
 	similarity_score = similarity_score.applymap(lambda x: (100/(1+x))).round(3)
 	
-	# df_tamilNadu.set_index('District name',inplace=True)
-	# df_bihar.set_index('District name',inplace=True)
 	similarity_score_json,df_bihar_json,df_tamilNadu_json = similarity_score.to_json(orient='index'),df_bihar.to_json(orient='index'),df_tamilNadu.to_json(orient='index')
 
 	#3rd Question
