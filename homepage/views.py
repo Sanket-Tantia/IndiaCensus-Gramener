@@ -8,7 +8,9 @@ from scipy import spatial as sp
 # Create your views here.
 def home(request):
 
-	df = pd.read_csv('C:/Users/19san/DjangoProjects/gramener/india-districts-census-2011.csv')
+	# df = pd.read_csv('C:/Users/19san/DjangoProjects/gramener/india-districts-census-2011.csv')
+	df = pd.read_pickle('../indiaCensusPickle')
+	
 
 	#1st question
 	#Grouping all the distrcits into states
