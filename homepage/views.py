@@ -1,16 +1,10 @@
 from django.shortcuts import render, HttpResponse
 import pandas as pd
 from scipy import spatial as sp
-import os
-#import matplotlib.pyplot as plt
-#from matplotlib import style
-#style.use('fivethirtyeight')
 
 # Create your views here.
 def home(request):
-
-	absolute_path = os.path.abspath(os.path.dirname('data.csv'))
-	df = pd.read_csv(absolute_path+'\india-districts-census-2011.csv')
+	df = pd.read_csv('https://raw.githubusercontent.com/Sanket-Tantia/IndiaCensus-Gramener/master/india-districts-census-2011.csv')
 	# print (absolute_path)
 	# df = pd.read_pickle('https://www.dropbox.com/s/vcjr57s9epjn7e0/indiaCensusPickle?dl=0')
 
@@ -62,6 +56,6 @@ def home(request):
 	
 	mobile_pen_json,df_json = mobile_pen.to_json(orient='index'),df.to_json(orient='index')
 
-	args = {'literacy_json':literacy_rate_json,'asbs': absolute_path , 'df_bihar_json':df_bihar_json, 'df_tamilNadu_json':df_tamilNadu_json, 'similarity_json':similarity_score_json, 'mobile_pen_json':mobile_pen_json, 'df_json':df_json}
+	args = {'literacy_json':literacy_rate_json,'df_bihar_json':df_bihar_json, 'df_tamilNadu_json':df_tamilNadu_json, 'similarity_json':similarity_score_json, 'mobile_pen_json':mobile_pen_json, 'df_json':df_json}
 
 	return render(request, 'homepage.html', args)
