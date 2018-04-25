@@ -25,7 +25,7 @@ SECRET_KEY = 'x8=65@gbk5fywh3yc_%%#c#4josuwkhgoog_0$pbfcp2lx_rag'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['gramenerindiacensus.herokuapp.com']
+ALLOWED_HOSTS = ['indiacensusgramener.herokuapp.com']
 
 
 # Application definition
