@@ -9,8 +9,8 @@ import os
 # Create your views here.
 def home(request):
 
-	df = pd.read_csv('C:/Users/19san/DjangoProjects/gramener/india-districts-census-2011.csv')
 	absolute_path = os.path.abspath(os.path.dirname('data.csv'))
+	df = pd.read_csv(absolute_path+'\india-districts-census-2011.csv')
 	# print (absolute_path)
 	# df = pd.read_pickle('https://www.dropbox.com/s/vcjr57s9epjn7e0/indiaCensusPickle?dl=0')
 
