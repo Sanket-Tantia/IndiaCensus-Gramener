@@ -2,9 +2,10 @@
 <html>
 <head>
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.css">
 	<title>Django App</title>
 </head>
-<body>
+<body onload="prettyPrint()">
 	<br>
 	<div class="container">
 		<nav class="navbar navbar-default">
@@ -29,7 +30,7 @@
 			<h3>Python Task 1</h3>
 			<h5>Q. Given two lists L1 = ['a', 'b', 'c'], L2 = ['b', 'd'], find common elements, find elements present in L1 and not in L2?</h5>
 			<!-- HTML generated using hilite.me -->	
-			<pre><code class="prettify">L1 = ['a', 'b', 'c']
+			<pre><code class="prettyprint">L1 = ['a', 'b', 'c']
 L2 = ['b', 'd']
 
 "Common Elements" : print (set(L1)-(set(L1)-set(L2)))
@@ -44,7 +45,7 @@ Output: {'c', 'a'}
 			<h5>Q. How many Thursdays were there between 1990 - 2000?
 			</h5>
 			<!-- HTML generated using hilite.me -->	
-			<pre><code class="prettify">from datetime import date
+			<pre><code class="prettyprint">from datetime import date
 startDate = date(1990, 1, 1)
 endDate = date(2000, 1, 1)
 
@@ -68,7 +69,7 @@ Output: 522
 			<br><br>
 			<button class="btn btn-primary" id="filterData" onclick="filterData()">Filter Data</button>
 			<br><br>
-			<pre><code class="prettify">data = [0, 1, 2, "stop", 2, 0, 1, "stop"]
+			<pre><code class="prettyprint">data = [0, 1, 2, "stop", 2, 0, 1, "stop"]
 var filterData = function(){
   data = data.filter(function(d){
     return d!=0;
@@ -76,7 +77,7 @@ var filterData = function(){
 }
 			</code></pre>
 			<h3>Use Case: India Census - 2011</h3>
-			<pre><code class="prettify">df = pd.read_csv('path name of the file')
+			<pre><code class="prettyprint">df = pd.read_csv('https://raw.githubusercontent.com/Sanket-Tantia/IndiaCensus-Gramener/master/india-districts-census-2011.csv')
 
 #1st question
 #Grouping all the distrcits into states
@@ -126,6 +127,7 @@ mobile_pen_json,mobile_pen_districts_json = mobile_pen.to_json(orient='index'),m
 			</code></pre>
 		</div>
 	</div>
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.js"></script>
 	<script type="text/javascript">
 		data = [0, 1, 2, "stop", 2, 0, 1, "stop"];
 		document.getElementById("filterMe").innerHTML = data;
