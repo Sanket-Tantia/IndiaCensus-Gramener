@@ -1,1 +1,1 @@
-web: gunicorn gramener.gramener.wsgi --log-file -
+web: gunicorn gramener.wsgi --log-file -
