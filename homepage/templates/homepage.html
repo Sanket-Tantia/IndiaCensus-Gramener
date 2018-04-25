@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<style type="text/css">
+	.highcharts-credits, .highcharts-contextbutton, .highcharts-title{
+		display: none;
+	}
+	.highcharts-text-outline {
+		visibility: hidden;
+	}
+
+	.highcharts-text-outline + tspan {
+		visibility: hidden;
+	}
+
+	.highcharts-point:last-child {
+		stroke: red !important;
+	}
+</style>
+{% load static %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.12.1/bootstrap-table.min.css">
+
+<!-- Latest compiled and minified JavaScript -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.12.1/bootstrap-table.min.js"></script>	
+<!-- <link type="text/javascript" href="{% static 'dst/Chart.HeatMap.js' %}"> -->
+<title>Django App</title>
+</head>
+<body>
+	<br>
+	<div class="container">
+		<nav class="navbar navbar-default">
+			<div class="container-fluid">
+				<div class="navbar-header">
+
+					<a class="navbar-brand" href="#">Gramener</a>
+				</div>
+				<div id="navbar" class="navbar-collapse">
+					<ul class="nav navbar-nav navbar-right">
+						<li class="active"><a href="/homepage">Use Case<span class="sr-only">(current)</span></a></li>
+						<li><a href="/description">Python Task</a></li>
+					</ul>
+				</div><!--/.nav-collapse -->
+			</div><!--/.container-fluid -->
+		</nav>
+		
+		<!-- Main component for a primary marketing message or call to action -->
+		<div class="jumbotron">
+			<h2>2011 India Census</h2>
+			<br>
+			<h4>Q. Create a geographic map of states with low literacy rates.</h4>
+			<div id="container1" style="min-width: 310px; height: 500px; margin: 0 auto"></div>
+			<br>
+			<h4>Q. Find out most similar districts in Bihar and Tamil Nadu. Similarity can be based on any of the columns from the data.</h4>
+			<div id="container2" style="width: 100%; height: 1300px; margin: 0 auto;padding: 10px;"></div>
+			<br>
+			<h4>Q. Find out mobile penetrations in region with low or high agricultural workers.</h4>
+			<div id="container3" style="min-width: 310px; height: 500px; margin: 0 auto"></div>
+		</div>
+	</div>
+	<script src="https://code.highcharts.com/highcharts.js"></script>
+	<script src="https://code.highcharts.com/modules/heatmap.js"></script>
+	<script src="https://code.highcharts.com/modules/drilldown.js"></script>
+	<script>
+		//1st question
+		literacy_json = {{literacy_json|safe}};
+		literacyData = new Array();
+		for (key in literacy_json) {
+			literacyData.push({
+				name: key,
+				y: parseFloat(literacy_json[key]['literacy_percent']),
+			})
+		}
+		Highcharts.chart('container1', {
+			chart: {
+				type: 'column',
+				marginTop: 50,
+				marginBottom: 160,
+				backgroundColor: null,
+
+			},
+
+			subtitle: {
+				text: 'State Literacy Bar Chart'
+			},
+			xAxis: {
+				type: 'category',
+				title: {
+					text: 'States with lowest literacy rate'
+				}
+			},
+
+			yAxis: {
+				title: {
+					text: 'Literacy Rate'
+				}
+			},
+
+			legend: {
+				enabled: false
+			},
+
+			plotOptions: {
+				series: {
+					borderWidth: 0,
+					dataLabels: {
+						enabled: true
+					}
+				}
+			},
+
+			tooltip: {
+				formatter: function () {
+					return 'Literacy Rate<br>' + ' is <b>' + this.point.y + '%'+'</b>';
+				}
+			},
+
+
+			series: [{
+				name: 'State',
+				colorByPoint: true,
+				data: literacyData.slice(0,15)
+			}],
+		});
+
+		//2nd question
+		df_bihar_json = {{df_bihar_json|safe}};
+		df_tamilNadu_json = {{df_tamilNadu_json|safe}};
+		similarity_json = {{similarity_json|safe}};
+		count=0;
+		similarityData = [[]];row=0;col=0;
+		for (key in similarity_json) {
+			similarityData[count]=[];
+			for (k in similarity_json[key]){
+				similarityData[count] = [row,col,(similarity_json[key][k])];
+				count++
+				row++;
+			}
+			row=0;col++;
+		}
+		Highcharts.chart('container2', {
+
+			chart: {
+				type: 'heatmap',
+				marginTop: 60,
+				marginBottom: 150,
+				plotBorderWidth: 1,
+				backgroundColor: null,
+				allAreas: false
+			},
+
+			xAxis: {
+				categories: Object.keys(df_tamilNadu_json),
+				title: {
+					text: 'Districts in Tamil Nadu'
+				}
+			},
+
+			yAxis: {
+				categories: Object.keys(df_bihar_json),
+				title: {
+					text: 'Districts in Bihar'
+				}
+			},
+
+			subtitle: {
+				text: 'Similarity between disticts of Bihar and TamilNadu'
+			},
+
+			colorAxis: {
+				min: 0,
+				minColor: '#FFFFFF',
+				maxColor: Highcharts.getOptions().colors[0]
+			},
+
+			legend: {
+				align: 'right',
+				layout: 'vertical',
+				margin: 0,
+				verticalAlign: 'top',
+				y: 130,
+				symbolHeight: 900
+			},
+
+			plotOptions:{
+				series:{
+                	turboThreshold:2000//set it to a larger threshold, it is by default to 1000
+                }
+            },
+
+            tooltip: {
+            	formatter: function () {
+            		return 'Similarity between<br>' + this.series.xAxis.categories[this.point.x] + ' and ' +
+            		this.series.yAxis.categories[this.point.y] + '<br> is <b>' + this.point.value + '%'+'</b>';
+            	}
+            },
+
+            series: [{
+            	name: 'Bihar and Tamil Nadu Similarity Index',
+            	borderWidth: 1,
+            	data: similarityData,
+            	dataLabels: {
+            		enabled: true,
+            		color: '#455A64'
+            	}
+            }]
+        });
+        //3rd question
+        mobile_pen_json = {{mobile_pen_json|safe}};
+        df_json = {{df_json|safe}};
+        count=0;
+        chartSeriesData = new Array();
+        chartDrilldownData = new Array();
+        for (key in mobile_pen_json) {
+        	chartSeriesData.push({
+        		name: key,
+        		y: parseFloat(mobile_pen_json[key]['Mobile_Penetration_percent']),
+        		drilldown: key
+        	})
+        	drillData = new Array();
+        	count=0;
+        	for (innerKey in df_json){
+        		if (df_json[innerKey]['State name']==key){
+        			drillData[count]=[];
+        			drillData[count]= [df_json[innerKey]['District name'],df_json[innerKey]['Mobile_Penetration_percent']];
+        			count++;
+        		}
+        	}
+
+        	chartDrilldownData.push({
+        		data : drillData,
+        		id: key,
+        	})
+        }
+        Highcharts.chart('container3', {
+        	chart: {
+        		type: 'column',
+        		marginTop: 60,
+        		marginBottom: 160,
+        		backgroundColor: null,
+
+        	},
+
+        	subtitle: {
+        		text: 'Mobile Penetration for region with low agricultural workers'
+        	},
+        	xAxis: {
+        		type: 'category',
+        		title: {
+        			text: 'States (Click to drill down)'
+        		}
+        	},
+
+        	yAxis: {
+        		title: {
+        			text: 'Mobile Penetrations'
+        		}
+        	},
+
+        	legend: {
+        		enabled: false
+        	},
+
+        	plotOptions: {
+        		series: {
+        			borderWidth: 0,
+        			dataLabels: {
+        				enabled: true
+        			}
+        		}
+        	},
+
+        	tooltip: {
+        		formatter: function () {
+        			return 'Mobile percentage<br>' + ' is <b>' + this.point.y + '%'+'</b>';
+        		}
+        	},
+
+        	series: [{
+        		name: 'State',
+        		colorByPoint: true,
+        		data: chartSeriesData.slice(0,15)
+        	}],
+        	drilldown: {
+        		series: chartDrilldownData,
+        		name: ' Districts'
+        	}
+        });
+    </script>
+</body>
+</html>

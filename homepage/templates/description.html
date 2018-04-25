@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+	<title>Django App</title>
+</head>
+<body>
+	<br>
+	<div class="container">
+		<nav class="navbar navbar-default">
+			<div class="container-fluid">
+				<div class="navbar-header">
+
+					<a class="navbar-brand" href="#">Gramener</a>
+				</div>
+				<div id="navbar" class="navbar-collapse">
+					<ul class="nav navbar-nav navbar-right">
+						<li><a href="/homepage">Use Case</a></li>
+						<li class="active"><a href="/description">Python Task<span class="sr-only">(current)</span></a></li>
+					</ul>
+				</div><!--/.nav-collapse -->
+			</div><!--/.container-fluid -->
+		</nav>
+
+		<!-- Main component for a primary marketing message or call to action -->
+		<div class="jumbotron">
+			<h3>Python Task 1</h3>
+			<h5>Q. Given two lists L1 = ['a', 'b', 'c'], L2 = ['b', 'd'], find common elements, find elements present in L1 and not in L2?</h5>
+			<!-- HTML generated using hilite.me -->	
+			<pre><code class="prettify">L1 = ['a', 'b', 'c']
+L2 = ['b', 'd']
+
+"Common Elements" : print (set(L1)-(set(L1)-set(L2)))
+Output: {'b'}
+
+"Elements in L1 not in L2" : print (set(L1)-set(L2))
+Output: {'c', 'a'}
+			</code></pre>
+
+
+			<h3>Python Task 2</h3>
+			<h5>Q. How many Thursdays were there between 1990 - 2000?
+			</h5>
+			<!-- HTML generated using hilite.me -->	
+			<pre><code class="prettify">from datetime import date
+startDate = date(1990, 1, 1)
+endDate = date(2000, 1, 1)
+
+diff = (endDate-startDate).days
+day_of_week = startDate.weekday()
+ans = (diff//7)
+
+for i in range(diff%7):
+if day_of_week in [2]:
+ans += 1
+day_of_week = (day_of_week +1) %7
+print (ans)
+
+Output: 522
+			</code></pre>
+
+			<h3>JavaScript Task</h3>
+			<h5>Q. Given the following Javascript array: var data = [0, 1, 2, 'stop', 2, 0, 1, 'stop']. Write a Javascript function or expression that returns an array with just the zeroes removed.
+			</h5>
+			<code id="filterMe" style="font-size:14px;"></code>
+			<br><br>
+			<button class="btn btn-primary" id="filterData" onclick="filterData()">Filter Data</button>
+			<br><br>
+			<pre><code class="prettify">data = [0, 1, 2, "stop", 2, 0, 1, "stop"]
+var filterData = function(){
+  data = data.filter(function(d){
+    return d!=0;
+  });
+}
+			</code></pre>
+			<h3>Use Case: India Census - 2011</h3>
+			<pre><code class="prettify">df = pd.read_csv('path name of the file')
+
+#1st question
+literacy_rate = df.groupby('State name')['Population','Literate'].sum()
+literacy_rate['literacy_percent'] = ((literacy_rate['Literate'])*100.0/literacy_rate['Population']).round(3)
+literacy_rate.sort_values(by=['literacy_percent'],inplace=True)
+literacy_rate_json = literacy_rate.to_json(orient='index')
+
+#2nd Question
+df_bihar = df[(df['State name'] == 'BIHAR')].iloc[:,2:]
+df_tamilNadu = df[(df['State name'] == 'TAMIL NADU')].iloc[:,2:]
+df_bihar_json,df_tamilNadu_json = df_bihar.to_json(orient='index'),df_tamilNadu.to_json(orient='index')
+for col in df_bihar.iloc[:,1:]:
+  df_bihar[col] = (df_bihar[col]-df_bihar[col].min())/(df_bihar[col].max()-df_bihar[col].min())
+  df_tamilNadu[col] = (df_tamilNadu[col]-df_tamilNadu[col].min())/(df_tamilNadu[col].max()-df_tamilNadu[col].min())
+similarity_score = pd.DataFrame(sp.distance.cdist(df_bihar.iloc[:,1:], df_tamilNadu.iloc[:,1:], metric='euclidean'),index = list(df_bihar['District name']),columns = list(df_tamilNadu['District name']))
+similarity_score = similarity_score.applymap(lambda x: (100/(1+x))).round(3)
+df_tamilNadu.set_index('District name',inplace=True)
+df_bihar.set_index('District name',inplace=True)
+similarity_score_json,df_bihar_json,df_tamilNadu_json = similarity_score.to_json(orient='index'),df_bihar.to_json(orient='index'),df_tamilNadu.to_json(orient='index')
+
+#3rd Question
+mobile_pen = df.groupby('State name')['Workers','Agricultural_Workers','Households','Households_with_Telephone_Mobile_Phone'].sum()
+mobile_pen['Agricultural_Workers_percent'] = ((mobile_pen['Agricultural_Workers'])*100.0/mobile_pen['Workers']).round(3)
+mobile_pen['Mobile_Penetration_percent'] = ((mobile_pen['Households_with_Telephone_Mobile_Phone'])*100.0/mobile_pen['Households']).round(3)
+mobile_pen.sort_values(by=['Agricultural_Workers_percent'],inplace=True)
+df['Agricultural_Workers_percent'] = ((df['Agricultural_Workers'])*100.0/df['Workers']).round(3)
+df['Mobile_Penetration_percent'] = ((df['Households_with_Telephone_Mobile_Phone'])*100.0/df['Households']).round(3)
+mobile_pen_json,df_json = mobile_pen.to_json(orient='index'),df.to_json(orient='index')
+			</code></pre>
+		</div>
+	</div>
+
+	<script type="text/javascript">
+		data = [0, 1, 2, "stop", 2, 0, 1, "stop"];
+		document.getElementById("filterMe").innerHTML = data;
+		var filterData = function(){
+			data = data.filter(function(d){
+				return d!=0;
+			});
+			document.getElementById("filterMe").innerHTML += "     =>     "+data;
+			document.getElementById("filterData").disabled = true;
+		}
+	</script>
+
+</body>
+</html>
