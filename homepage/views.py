@@ -28,7 +28,7 @@ def home(request):
 	similarity_score = pd.DataFrame(sp.distance.cdist(df_bihar.iloc[:,1:], df_tamilNadu.iloc[:,1:], metric='euclidean'),index = list(df_bihar['District name']),columns = list(df_tamilNadu['District name']))
 	#converting eucledian distance into similarity score
 	similarity_score = similarity_score.applymap(lambda x: (100/(1+x))).round(3)
-	similarity_score_json,df_bihar_json,df_tamilNadu_json = similarity_score.to_json(orient='index'),df_bihar.to_json(orient='index'),df_tamilNadu.to_json(orient='index')
+	similarity_score_json = similarity_score.to_json(orient='index')
 
 	#3rd Question
 	#Grouping all the distrcits into states
