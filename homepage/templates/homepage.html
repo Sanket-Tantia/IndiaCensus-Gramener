@@ -59,7 +59,6 @@
 			<div id="container3" style="min-width: 310px; height: 500px; margin: 0 auto"></div>
 		</div>
 	</div>
-	{{asbs}}
 	<script src="https://code.highcharts.com/highcharts.js"></script>
 	<script src="https://code.highcharts.com/modules/heatmap.js"></script>
 	<script src="https://code.highcharts.com/modules/drilldown.js"></script>
@@ -126,16 +125,17 @@
 		});
 
 		//2nd question
-		df_bihar_json = {{df_bihar_json|safe}};
-		df_tamilNadu_json = {{df_tamilNadu_json|safe}};
+		//df_bihar_json = {{df_bihar_json|safe}};
+		//df_tamilNadu_json = {{df_tamilNadu_json|safe}};
 		similarity_json = {{similarity_json|safe}};
+		tamilnadu_districts = Object.keys(similarity_json[Object.keys(similarity_json)[0]]);
 		count=0;
 		similarityData = [[]];row=0;col=0;
 		for (key in similarity_json) {
 			similarityData[count]=[];
 			for (k in similarity_json[key]){
 				similarityData[count] = [row,col,(similarity_json[key][k])];
-				count++
+				count++;
 				row++;
 			}
 			row=0;col++;
@@ -152,14 +152,14 @@
 			},
 
 			xAxis: {
-				categories: Object.keys(df_tamilNadu_json),
+				categories: Object.keys(tamilnadu_districts),
 				title: {
 					text: 'Districts in Tamil Nadu'
 				}
 			},
 
 			yAxis: {
-				categories: Object.keys(df_bihar_json),
+				categories: Object.keys(similarity_json),
 				title: {
 					text: 'Districts in Bihar'
 				}
@@ -209,7 +209,7 @@
         });
         //3rd question
         mobile_pen_json = {{mobile_pen_json|safe}};
-        df_json = {{df_json|safe}};
+        mobile_pen_districts_json = {{mobile_pen_districts_json|safe}};
         count=0;
         chartSeriesData = new Array();
         chartDrilldownData = new Array();
@@ -221,10 +221,10 @@
         	})
         	drillData = new Array();
         	count=0;
-        	for (innerKey in df_json){
-        		if (df_json[innerKey]['State name']==key){
+        	for (innerKey in mobile_pen_districts_json){
+        		if (mobile_pen_districts_json[innerKey]['State name']==key){
         			drillData[count]=[];
-        			drillData[count]= [df_json[innerKey]['District name'],df_json[innerKey]['Mobile_Penetration_percent']];
+        			drillData[count]= [mobile_pen_districts_json[innerKey]['District name'],mobile_pen_districts_json[innerKey]['Mobile_Penetration_percent']];
         			count++;
         		}
         	}

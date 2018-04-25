@@ -22,7 +22,7 @@ def home(request):
 	#Extracting districts of bihar and tamilnadu
 	df_bihar = df[(df['State name'] == 'BIHAR')].iloc[:,2:]
 	df_tamilNadu = df[(df['State name'] == 'TAMIL NADU')].iloc[:,2:]
-	df_bihar_json,df_tamilNadu_json = df_bihar.to_json(orient='index'),df_tamilNadu.to_json(orient='index')
+	# df_bihar_json,df_tamilNadu_json = df_bihar.to_json(orient='index'),df_tamilNadu.to_json(orient='index')
 	
 	#normalising the columns so that value of one column does not mask the effect of others
 	for col in df_bihar.iloc[:,1:]:
@@ -35,8 +35,8 @@ def home(request):
 	#converting eucledian distance into similarity score
 	similarity_score = similarity_score.applymap(lambda x: (100/(1+x))).round(3)
 	
-	df_tamilNadu.set_index('District name',inplace=True)
-	df_bihar.set_index('District name',inplace=True)
+	# df_tamilNadu.set_index('District name',inplace=True)
+	# df_bihar.set_index('District name',inplace=True)
 	similarity_score_json,df_bihar_json,df_tamilNadu_json = similarity_score.to_json(orient='index'),df_bihar.to_json(orient='index'),df_tamilNadu.to_json(orient='index')
 
 	#3rd Question
@@ -51,11 +51,12 @@ def home(request):
 	mobile_pen.sort_values(by=['Agricultural_Workers_percent'],inplace=True)
 	
 	#Calculating Agricultural_Workers_% & Mobile_Penetration_% of each district in all the states
-	df['Agricultural_Workers_percent'] = ((df['Agricultural_Workers'])*100.0/df['Workers']).round(3)
-	df['Mobile_Penetration_percent'] = ((df['Households_with_Telephone_Mobile_Phone'])*100.0/df['Households']).round(3)
+	mobile_pen_districts = df[['State name','District name']]
+	mobile_pen_districts['Agricultural_Workers_percent'] = ((df['Agricultural_Workers'])*100.0/df['Workers']).round(3)
+	mobile_pen_districts['Mobile_Penetration_percent'] = ((df['Households_with_Telephone_Mobile_Phone'])*100.0/df['Households']).round(3)
 	
-	mobile_pen_json,df_json = mobile_pen.to_json(orient='index'),df.to_json(orient='index')
+	mobile_pen_json,mobile_pen_districts_json = mobile_pen.to_json(orient='index'),mobile_pen_districts.to_json(orient='index')
 
-	args = {'literacy_json':literacy_rate_json,'df_bihar_json':df_bihar_json, 'df_tamilNadu_json':df_tamilNadu_json, 'similarity_json':similarity_score_json, 'mobile_pen_json':mobile_pen_json, 'df_json':df_json}
+	args = {'literacy_json':literacy_rate_json,'similarity_json':similarity_score_json, 'mobile_pen_json':mobile_pen_json, 'mobile_pen_districts_json':mobile_pen_districts_json}
 
 	return render(request, 'homepage.html', args)
